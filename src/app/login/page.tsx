@@ -20,11 +20,20 @@ export default function LoginPage() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        height: "100vh",
+        // minHeight: "100vh", // Ensures it takes the full viewport height
+        margin: 0, // Removes any default margin
         backgroundColor: "#f0f2f5",
       }}
     >
-      <div style={{ width: 300, padding: 24, background: "#fff", borderRadius: 8, boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)" }}>
+      <div
+        style={{
+          width: 300,
+          padding: 24,
+          background: "#fff",
+          borderRadius: 8,
+          boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+        }}
+      >
         <h2 style={{ textAlign: "center", marginBottom: 24 }}>Login</h2>
         <Form
           name="login"
