@@ -9,7 +9,7 @@ const { Title, Text } = Typography;
 
 export default function Home() {
   const { questions } = useQuestionsStore();
-  const { selectedAnswers, addAnswer, resetAnswers } = useSelectedAnswersStore(); // Use the updated store
+  const { selectedAnswers, addAnswer } = useSelectedAnswersStore(); // Use the updated store
   const [tempSelectedAnswers, setTempSelectedAnswers] = useState<Record<number, string | null>>({});
   const [score, setScore] = useState<number | null>(null);
 
