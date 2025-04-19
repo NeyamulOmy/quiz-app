@@ -17,16 +17,51 @@ git clone https://github.com/your-username/quiz-app.git
 cd quiz-app
 ```
 
-First, run the development server:
+### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+### 3. Run the Development Server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser to view the app.
+
+### 4. Build for Production
+
+To create a production build, run:
+
+```bash
+npm run build
+```
+
+To start the production server:
+
+```bash
+npm start
+```
+
+---
+
+## Technologies Used
+
+This project is built using the following technologies:
+
+- **[Next.js](https://nextjs.org/)**: A React framework for server-side rendering and static site generation.
+- **[React](https://reactjs.org/)**: A JavaScript library for building user interfaces.
+- **[Ant Design](https://ant.design/)**: A UI library for building elegant and responsive user interfaces.
+- **[Zustand](https://zustand-demo.pmnd.rs/)**: A lightweight state management library for React.
+- **TypeScript**: A strongly typed programming language that builds on JavaScript.
+- **ESLint**: A tool for identifying and fixing problems in JavaScript and TypeScript code.
+
+---
+
+## Learn More
+
+To learn more about Next.js, visit the [Next.js Documentation](https://nextjs.org/docs).
+
+To learn more about Ant Design, visit the [Ant Design Documentation](https://ant.design/docs/react/introduce).
