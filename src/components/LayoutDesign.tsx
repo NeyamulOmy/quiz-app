@@ -4,6 +4,7 @@ import { Layout, Button, Space } from "antd";
 import React from "react";
 import { useRouter } from "next/navigation"; // Import useRouter for navigation
 import useUserStore from "@/store/store"; // Import Zustand store
+import Link from "next/link";
 
 const { Header, Footer, Content } = Layout;
 
@@ -28,7 +29,7 @@ export default function LayoutDesign({ children }: { children: React.ReactNode }
       >
         {/* Centered Title */}
         <div style={{ flex: 1, textAlign: "center", fontSize: "20px", color: "#fff" }}>
-          Quiz App
+        <Link href="/">Quiz App</Link>
         </div>
 
         {/* Conditional Buttons */}
