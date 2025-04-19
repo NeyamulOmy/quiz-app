@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import useSelectedAnswersStore from "@/store/selectedAnswersStore";
 
 interface User {
   username: string;
@@ -46,12 +47,16 @@ const useUserStore = create<UserState>()(
           });
         }
       },
-      logout: () =>
+      logout: () => {
         set({
           user: null,
           isLoggedIn: false,
           error: null,
-        }),
+        });
+
+        // Clear previous answers state
+        useSelectedAnswersStore.getState().resetAnswers();
+      },
     }),
     {
       name: "user-store", // Key for localStorage
