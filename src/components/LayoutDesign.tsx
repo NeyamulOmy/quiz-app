@@ -2,7 +2,7 @@
 
 import { Layout, Button, Space } from "antd";
 import React from "react";
-import { useRouter } from "next/navigation"; // Import useRouter for navigation
+import { useRouter, usePathname } from "next/navigation"; // Import usePathname for current route
 import useUserStore from "@/store/store"; // Import Zustand store
 import Link from "next/link";
 
@@ -13,6 +13,7 @@ export default function LayoutDesign({ children }: { children: React.ReactNode }
   const isLoggedIn = useUserStore((state) => state.isLoggedIn); // Check if the user is logged in
   const logout = useUserStore((state) => state.logout); // Logout action from Zustand store
   const router = useRouter(); // Initialize the router
+  const pathname = usePathname(); // Get the current route
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -29,17 +30,25 @@ export default function LayoutDesign({ children }: { children: React.ReactNode }
       >
         {/* Centered Title */}
         <div style={{ flex: 1, textAlign: "center", fontSize: "20px", color: "#fff" }}>
-        <Link href="/">Quiz App</Link>
+          <Link href="/">Quiz App</Link>
         </div>
 
         {/* Conditional Buttons */}
         <Space style={{ marginLeft: "auto" }}>
-          {isLoggedIn && user?.role === "admin" && (
+          {isLoggedIn && user?.role === "admin" && pathname !== "/questions" && (
             <Button
               type="primary"
               onClick={() => router.push("/questions")} // Navigate to /questions
             >
               Questions
+            </Button>
+          )}
+          {isLoggedIn && pathname !== "/" && (
+            <Button
+              type="primary"
+              onClick={() => router.push("/")} // Navigate to /
+            >
+              Take Quiz
             </Button>
           )}
           {isLoggedIn && (
