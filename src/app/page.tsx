@@ -32,6 +32,19 @@ export default function Home() {
           <Card>
             <Title level={3}>Quiz Finished!</Title>
             <Text>Your score: {score} / {questions.length}</Text>
+            <Space style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
+              <Button
+                type="primary"
+                onClick={() => {
+                  setSelectedOptions(
+                    questions.reduce((acc, question) => ({ ...acc, [question.id]: null }), {})
+                  );
+                  setScore(null);
+                }}
+              >
+                Retake Quiz
+              </Button>
+            </Space>
           </Card>
         ) : (
           <List
