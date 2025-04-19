@@ -1,22 +1,62 @@
 "use client";
 
-import { Layout } from "antd";
+import { Layout, Button, Space } from "antd";
 import React from "react";
+import { useRouter } from "next/navigation"; // Import useRouter for navigation
+import useUserStore from "@/store/store"; // Import Zustand store
 
 const { Header, Footer, Content } = Layout;
 
 export default function LayoutDesign({ children }: { children: React.ReactNode }) {
+  const user = useUserStore((state) => state.user); // Get the logged-in user
+  const isLoggedIn = useUserStore((state) => state.isLoggedIn); // Check if the user is logged in
+  const logout = useUserStore((state) => state.logout); // Logout action from Zustand store
+  const router = useRouter(); // Initialize the router
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
       {/* Header */}
-      <Header style={{ backgroundColor: "#001529", color: "#fff", textAlign: "center", fontSize: "20px" }}>
-        Quiz App
+      <Header
+        style={{
+          backgroundColor: "#001529",
+          color: "#fff",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "0 16px",
+        }}
+      >
+        {/* Centered Title */}
+        <div style={{ flex: 1, textAlign: "center", fontSize: "20px", color: "#fff" }}>
+          Quiz App
+        </div>
+
+        {/* Conditional Buttons */}
+        <Space style={{ marginLeft: "auto" }}>
+          {isLoggedIn && user?.role === "admin" && (
+            <Button
+              type="primary"
+              onClick={() => router.push("/questions")} // Navigate to /questions
+            >
+              Questions
+            </Button>
+          )}
+          {isLoggedIn && (
+            <Button
+              type="default"
+              onClick={() => {
+                logout(); // Call the logout action
+                router.push("/login"); // Redirect to the login page
+              }}
+            >
+              Logout
+            </Button>
+          )}
+        </Space>
       </Header>
 
       {/* Content */}
-      <Content style={{ padding: "24px" }}>
-        {children}
-      </Content>
+      <Content style={{ padding: "24px" }}>{children}</Content>
 
       {/* Footer */}
       <Footer style={{ textAlign: "center", backgroundColor: "#f0f2f5" }}>

@@ -1,18 +1,29 @@
 "use client";
 
 import { Form, Input, Button } from "antd";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation"; // Import useRouter for navigation
+import useUserStore from "@/store/store"; // Import the Zustand store
 
 export default function LoginPage() {
+  const login = useUserStore((state) => state.login); // Zustand login action
+  const error = useUserStore((state) => state.error); // Zustand error state
+  const isLoggedIn = useUserStore((state) => state.isLoggedIn); // Zustand login state
   const [loading, setLoading] = useState(false);
+  const router = useRouter(); // Initialize the router
 
   const handleSubmit = (values: { username: string; password: string }) => {
     setLoading(true);
-    console.log("Username:", values.username);
-    console.log("Password:", values.password);
-    // Add your login logic here
+    login(values.username, values.password); // Call Zustand's login action
     setTimeout(() => setLoading(false), 1000); // Simulate a network request
   };
+
+  // Redirect to home page when logged in
+  useEffect(() => {
+    if (isLoggedIn) {
+      router.push("/"); // Redirect to the home page
+    }
+  }, [isLoggedIn, router]); // Run this effect when isLoggedIn changes
 
   return (
     <div
@@ -20,8 +31,8 @@ export default function LoginPage() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        // minHeight: "100vh", // Ensures it takes the full viewport height
-        margin: 0, // Removes any default margin
+        minHeight: "100vh",
+        margin: 0,
         backgroundColor: "#f0f2f5",
       }}
     >
@@ -56,6 +67,12 @@ export default function LoginPage() {
           >
             <Input.Password placeholder="Enter your password" />
           </Form.Item>
+
+          {error && (
+            <div style={{ color: "red", marginBottom: 16, textAlign: "center" }}>
+              {error}
+            </div>
+          )}
 
           <Form.Item>
             <Button
