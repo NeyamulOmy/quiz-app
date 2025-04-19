@@ -1,6 +1,7 @@
 'use client';
 import ProtectedRoute from "@/components/ProtectedRoute";
 import useQuestionsStore from "@/store/questionsStore";
+import useSelectedAnswersStore from "@/store/selectedAnswersStore"; // Import the updated store
 import { useState } from "react";
 import { Card, Button, Typography, Space, List, Radio } from "antd";
 
@@ -8,20 +9,32 @@ const { Title, Text } = Typography;
 
 export default function Home() {
   const { questions } = useQuestionsStore();
-  const [selectedOptions, setSelectedOptions] = useState<Record<number, string | null>>(
-    questions.reduce((acc, question) => ({ ...acc, [question.id]: null }), {})
-  );
+  const { selectedAnswers, addAnswer, resetAnswers } = useSelectedAnswersStore(); // Use the updated store
+  const [tempSelectedAnswers, setTempSelectedAnswers] = useState<Record<number, string | null>>({});
   const [score, setScore] = useState<number | null>(null);
 
   const handleOptionSelect = (questionId: number, option: string) => {
-    setSelectedOptions((prev) => ({ ...prev, [questionId]: option }));
+    setTempSelectedAnswers((prev) => ({ ...prev, [questionId]: option }));
   };
 
   const handleSubmitQuiz = () => {
     const calculatedScore = questions.reduce((acc, question) => {
-      return acc + (selectedOptions[question.id] === question.answer ? 1 : 0);
+      return acc + (tempSelectedAnswers[question.id] === question.answer ? 1 : 0);
     }, 0);
+
+    // Store all answers in the Zustand store
+    Object.entries(tempSelectedAnswers).forEach(([questionId, answer]) => {
+      if (answer) {
+        addAnswer(Number(questionId), answer); // Add the answer to the history
+      }
+    });
+
     setScore(calculatedScore);
+  };
+
+  const handleRetakeQuiz = () => {
+    setTempSelectedAnswers({}); // Clear temporary answers
+    setScore(null);
   };
 
   return (
@@ -33,15 +46,7 @@ export default function Home() {
             <Title level={3}>Quiz Finished!</Title>
             <Text>Your score: {score} / {questions.length}</Text>
             <Space style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
-              <Button
-                type="primary"
-                onClick={() => {
-                  setSelectedOptions(
-                    questions.reduce((acc, question) => ({ ...acc, [question.id]: null }), {})
-                  );
-                  setScore(null);
-                }}
-              >
+              <Button type="primary" onClick={handleRetakeQuiz}>
                 Retake Quiz
               </Button>
             </Space>
@@ -55,8 +60,8 @@ export default function Home() {
                   {index + 1}. {question.question}
                 </Title>
                 <Radio.Group
+                  value={tempSelectedAnswers[question.id] || null}
                   onChange={(e) => handleOptionSelect(question.id, e.target.value)}
-                  value={selectedOptions[question.id]}
                 >
                   {question.options.map((option) => (
                     <Radio key={option} value={option} style={{ display: "block", marginBottom: "10px" }}>
@@ -64,6 +69,11 @@ export default function Home() {
                     </Radio>
                   ))}
                 </Radio.Group>
+                {selectedAnswers[question.id] && (
+                  <Text style={{ marginLeft: "10px", display: "block" }}>
+                    Previous Answers: {selectedAnswers[question.id].join(", ")}
+                  </Text>
+                )}
               </Card>
             )}
           />
@@ -73,7 +83,7 @@ export default function Home() {
             <Button
               type="primary"
               onClick={handleSubmitQuiz}
-              disabled={Object.values(selectedOptions).some((option) => option === null)}
+              disabled={Object.values(tempSelectedAnswers).some((option) => option === null)}
             >
               Submit Quiz
             </Button>
