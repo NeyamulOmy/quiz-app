@@ -15,7 +15,12 @@ export default function LoginPage() {
   const handleSubmit = (values: { username: string; password: string }) => {
     setLoading(true);
     login(values.username, values.password); // Call Zustand's login action
-    setTimeout(() => setLoading(false), 1000); // Simulate a network request
+    setTimeout(() => {
+      setLoading(false);
+      if (useUserStore.getState().isLoggedIn) {
+        router.push("/"); // Redirect to the home page
+      }
+    }, 1000); // Simulate a network request
   };
 
   // Redirect to home page when logged in
