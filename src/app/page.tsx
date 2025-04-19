@@ -71,7 +71,20 @@ export default function Home() {
                 </Radio.Group>
                 {selectedAnswers[question.id] && (
                   <Text style={{ marginLeft: "10px", display: "block" }}>
-                    <strong>Previous Answers: </strong>{selectedAnswers[question.id].join(", ")}
+                    <strong>Previous Answers:</strong>{" "}
+                    {selectedAnswers[question.id].map((answer, index) => (
+                      <span key={index}>
+                        <Text
+                          type={answer === question.answer ? "success" : "danger"}
+                          style={{ marginRight: "2px" }}
+                        >
+                          {answer}
+                        </Text>
+                        {index < selectedAnswers[question.id].length - 1 && (
+                          <Text style={{ color: "black", marginRight: "5px" }}>;</Text>
+                        )}
+                      </span>
+                    ))}
                   </Text>
                 )}
               </Card>
