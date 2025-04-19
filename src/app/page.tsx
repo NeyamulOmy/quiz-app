@@ -71,7 +71,7 @@ export default function Home() {
                 </Radio.Group>
                 {selectedAnswers[question.id] && (
                   <Text style={{ marginLeft: "10px", display: "block" }}>
-                    Previous Answers: {selectedAnswers[question.id].join(", ")}
+                    <strong>Previous Answers: </strong>{selectedAnswers[question.id].join(", ")}
                   </Text>
                 )}
               </Card>
