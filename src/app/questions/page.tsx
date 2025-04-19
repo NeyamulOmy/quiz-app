@@ -1,7 +1,13 @@
+import AdminOnlyRoute from '@/components/AdminOnlyRoute'
 import React from 'react'
 
 export default function page() {
   return (
-    <div>page</div>
+    <AdminOnlyRoute>
+        <div>
+            page
+        </div>
+    </AdminOnlyRoute>
+    
   )
 }
