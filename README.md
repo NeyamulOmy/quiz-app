@@ -5,7 +5,9 @@ This is a [Next.js](https://nextjs.org) project built with Ant Design and Zustan
 ## Live Demo
 
 You can access the live version of the app here: [Quiz App](https://quiz-app-1s2v.vercel.app/)
-
+### Credentials
+1. username:admin, password:admin
+2. username:user, password:user
 ## Getting Started
 
 Follow these steps to clone and run the project locally:
