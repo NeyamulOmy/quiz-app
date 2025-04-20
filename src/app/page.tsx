@@ -31,9 +31,15 @@ export default function Home() {
     setScore(calculatedScore);
   };
 
-  const handleRetakeQuiz = () => {
+  const handleEditAnswers = () => {
     setTempSelectedAnswers(selectedAnswers); // Pre-fill with the last selected answers
     setScore(null);
+  };
+
+  const handleRetakeQuiz = () => {
+    resetAnswers(); // Clear all previous answers from the Zustand store
+    setTempSelectedAnswers({}); // Clear temporary answers
+    setScore(null); // Reset the score
   };
 
   return (
@@ -44,9 +50,31 @@ export default function Home() {
           <Card>
             <Title level={3}>Quiz Finished!</Title>
             <Text>Your score: {score} / {questions.length}</Text>
+            <List
+              dataSource={questions}
+              renderItem={(question) => (
+                <Card key={question.id} style={{ marginBottom: "20px" }}>
+                  <Title level={4}>{question.question}</Title>
+                  <Text>
+                    <strong>Selected Answer:</strong> {selectedAnswers[question.id] || "Not Answered"}
+                  </Text>
+                  <br />
+                  <Text
+                    type={selectedAnswers[question.id] === question.answer ? "success" : "danger"}
+                  >
+                    {selectedAnswers[question.id] === question.answer
+                      ? "Correct Answer"
+                      : "Wrong Answer"}
+                  </Text>
+                </Card>
+              )}
+            />
             <Space style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
-              <Button type="primary" onClick={handleRetakeQuiz}>
+              <Button type="primary" onClick={handleEditAnswers}>
                 Edit Answers
+              </Button>
+              <Button type="default" danger onClick={handleRetakeQuiz}>
+                Retake Quiz
               </Button>
             </Space>
           </Card>
