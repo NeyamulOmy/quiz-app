@@ -56,7 +56,7 @@ export default function Home() {
                 <Card key={question.id} style={{ marginBottom: "20px" }}>
                   <Title level={4}>{question.question}</Title>
                   <Text>
-                    <strong>Selected Answer:</strong> {selectedAnswers[question.id] || "Not Answered"}
+                    <strong>Your Answer:</strong> {selectedAnswers[question.id] || "Not Answered"}
                   </Text>
                   <br />
                   <Text
