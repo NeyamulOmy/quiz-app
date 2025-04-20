@@ -13,6 +13,8 @@ export default function Page() {
   const [editedQuestions, setEditedQuestions] = useState<Record<number, { options: string[]; answer: string }>>({});
   const [saving, setSaving] = useState<Record<number, boolean>>({});
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [questionToDelete, setQuestionToDelete] = useState<number | null>(null);
   const [newQuestion, setNewQuestion] = useState({
     question: '',
     options: ['', '', '', ''],
@@ -59,7 +61,16 @@ export default function Page() {
   };
 
   const handleDeleteQuestion = (questionId: number) => {
-    removeQuestion(questionId);
+    setQuestionToDelete(questionId);
+    setDeleteModalVisible(true);
+  };
+
+  const confirmDeleteQuestion = () => {
+    if (questionToDelete !== null) {
+      removeQuestion(questionToDelete);
+      setQuestionToDelete(null);
+      setDeleteModalVisible(false);
+    }
   };
 
   const handleAddQuestion = () => {
@@ -144,7 +155,7 @@ export default function Page() {
 
         <Modal
           title="Add New Question"
-          visible={isModalOpen}
+          open={isModalOpen}
           onCancel={() => setIsModalOpen(false)}
           footer={null}
         >
@@ -189,6 +200,18 @@ export default function Page() {
               Add Question
             </Button>
           </Form>
+        </Modal>
+
+        <Modal
+          title="Confirm Deletion"
+          open={deleteModalVisible}
+          onOk={confirmDeleteQuestion}
+          onCancel={() => setDeleteModalVisible(false)}
+          okText="Yes"
+          okType="danger"
+          cancelText="No"
+        >
+          <p>Are you sure you want to delete this question? This action cannot be undone.</p>
         </Modal>
       </div>
     </AdminOnlyRoute>
