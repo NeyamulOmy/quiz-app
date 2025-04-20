@@ -2,6 +2,15 @@
 
 This is a [Next.js](https://nextjs.org) project built with Ant Design and Zustand for state management.
 
+## Features
+1. Two types of role: admin and user.
+2. Users need to be logged in before taking the quiz.
+3. After submitting the questions users can see their score along with whether the submitted answers were correct or not.
+4. Users can choose to edit their submitted answers where their previous answers are shown.
+5. Users can also choose to retake a new quiz.
+6. Admin can manage the questions, add new questions, change correct answers and delete questions.
+7. All the data are locally persisted.
+
 ## Live Demo
 
 You can access the live version of the app here: [Quiz App](https://quiz-app-1s2v.vercel.app/)
