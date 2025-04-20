@@ -1,7 +1,7 @@
 'use client';
 import ProtectedRoute from "@/components/ProtectedRoute";
 import useQuestionsStore from "@/store/questionsStore";
-import useSelectedAnswersStore from "@/store/selectedAnswersStore"; // Import the updated store
+import useSelectedAnswersStore from "@/store/selectedAnswersStore";
 import { useState } from "react";
 import { Card, Button, Typography, Space, List, Radio } from "antd";
 
@@ -9,7 +9,7 @@ const { Title, Text } = Typography;
 
 export default function Home() {
   const { questions } = useQuestionsStore();
-  const { selectedAnswers, addAnswer } = useSelectedAnswersStore(); // Use the updated store
+  const { selectedAnswers, setAnswer, resetAnswers } = useSelectedAnswersStore();
   const [tempSelectedAnswers, setTempSelectedAnswers] = useState<Record<number, string | null>>({});
   const [score, setScore] = useState<number | null>(null);
 
@@ -22,10 +22,9 @@ export default function Home() {
       return acc + (tempSelectedAnswers[question.id] === question.answer ? 1 : 0);
     }, 0);
 
-    // Store all answers in the Zustand store
     Object.entries(tempSelectedAnswers).forEach(([questionId, answer]) => {
       if (answer) {
-        addAnswer(Number(questionId), answer); // Add the answer to the history
+        setAnswer(Number(questionId), answer); // Store the last selected answer
       }
     });
 
@@ -33,7 +32,7 @@ export default function Home() {
   };
 
   const handleRetakeQuiz = () => {
-    setTempSelectedAnswers({}); // Clear temporary answers
+    setTempSelectedAnswers(selectedAnswers); // Pre-fill with the last selected answers
     setScore(null);
   };
 
@@ -47,7 +46,7 @@ export default function Home() {
             <Text>Your score: {score} / {questions.length}</Text>
             <Space style={{ marginTop: "20px", display: "flex", justifyContent: "center" }}>
               <Button type="primary" onClick={handleRetakeQuiz}>
-                Retake Quiz
+                Edit Answers
               </Button>
             </Space>
           </Card>
@@ -70,21 +69,13 @@ export default function Home() {
                   ))}
                 </Radio.Group>
                 {selectedAnswers[question.id] && (
-                  <Text style={{ marginLeft: "10px", display: "block" }}>
-                    <strong>Previous Answers:</strong>{" "}
-                    {selectedAnswers[question.id].map((answer, index) => (
-                      <span key={index}>
-                        <Text
-                          type={answer === question.answer ? "success" : "danger"}
-                          style={{ marginRight: "2px" }}
-                        >
-                          {answer}
-                        </Text>
-                        {index < selectedAnswers[question.id].length - 1 && (
-                          <Text style={{ color: "black", marginRight: "5px" }}>;</Text>
-                        )}
-                      </span>
-                    ))}
+                  <Text
+                    type={selectedAnswers[question.id] === question.answer ? "success" : "danger"}
+                    style={{ marginLeft: "10px", display: "block" }}
+                  >
+                    {selectedAnswers[question.id] === question.answer
+                      ? "Correct Answer"
+                      : "Wrong Answer"}
                   </Text>
                 )}
               </Card>

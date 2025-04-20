@@ -2,8 +2,8 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface SelectedAnswersState {
-  selectedAnswers: Record<number, string[]>; // Store an array of answers for each question
-  addAnswer: (questionId: number, answer: string) => void;
+  selectedAnswers: Record<number, string | null>; // Store the last selected answer for each question
+  setAnswer: (questionId: number, answer: string | null) => void;
   resetAnswers: () => void;
 }
 
@@ -11,12 +11,9 @@ const useSelectedAnswersStore = create<SelectedAnswersState>()(
   persist(
     (set) => ({
       selectedAnswers: {}, // Initialize with an empty object
-      addAnswer: (questionId, answer) =>
+      setAnswer: (questionId, answer) =>
         set((state) => ({
-          selectedAnswers: {
-            ...state.selectedAnswers,
-            [questionId]: [...(state.selectedAnswers[questionId] || []), answer], // Append the new answer
-          },
+          selectedAnswers: { ...state.selectedAnswers, [questionId]: answer }, // Update the last selected answer
         })),
       resetAnswers: () => set({ selectedAnswers: {} }), // Reset all answers
     }),
