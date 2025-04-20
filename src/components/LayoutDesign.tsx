@@ -40,7 +40,7 @@ export default function LayoutDesign({ children }: { children: React.ReactNode }
               type="primary"
               onClick={() => router.push("/questions")} // Navigate to /questions
             >
-              Questions
+              Manage Questions
             </Button>
           )}
           {isLoggedIn && pathname !== "/" && (
